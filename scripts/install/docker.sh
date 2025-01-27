@@ -3,7 +3,8 @@
 set -e
 
 echo "Begin docker installation"
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin; do sudo apt-get -y remove $pkg; done
+sudo apt-get update
+for pkg in docker.io docker-compose docker-compose-v2 containerd runc; do sudo apt-get remove $pkg; done
 
 echo  "Add Docker's official GPG key:"
 sudo apt-get update > /dev/null
