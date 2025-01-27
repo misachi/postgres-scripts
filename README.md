@@ -3,6 +3,14 @@ Can be useful for testing how different Postgres configurations affect performan
 
 **This has only been tested on a machine running Ubuntu Linux(specifically Ubuntu jammy, but should probably work on most Ubuntu platforms)**
 
+From the Docker docs, these are the supported Ubuntu versions:
+```
+Ubuntu Oracular 24.10
+Ubuntu Noble 24.04 (LTS)
+Ubuntu Jammy 22.04 (LTS)
+Ubuntu Focal 20.04 (LTS)
+```
+
 Some requirements are:
 1. Make build tool (apt get install make)
 2. Docker (can be installed with `make install_docker` or check the [docker page](https://docs.docker.com/engine/install/ubuntu/))
@@ -12,20 +20,18 @@ Some requirements are:
 These environment variables would need to be set before running below commands:
 
 1. PORT - port the postmaster will be listening on(default 5432)
-2. USER, DATABASE, PASSWORD - To be used by Sysbench. Should all probably be set to `sbtest`
-3. HOST - IP address of the instance running the Postgres server
-4. TABLESIZE - How big the tables for running with Sysbench should be. Each table will have `TABLESIZE` rows
-5. MY_IP - IP address of the client(Where Sysbench will be run from)
+2. HOST - IP address of the instance running the Postgres server
+3. TABLESIZE - How big the tables for running with Sysbench should be. Each table will have `TABLESIZE` rows
+4. MY_IP - IP address of the client(Where Sysbench will be run from)
+5. VERSION_STR - The version number for image tag e.g for image `postgres/test-0.0.3` the `VERSION_STR` is 0.0.3
 
 Example:
 ```
 export PORT=5432
-export USER=sbtest
-export DATABASE=sbtest
-export PASSWORD=sbtest
 export HOST=192.168.44.21
 export TABLESIZE=1000000
 export MY_IP=192.168.44.21
+export VERSION_STR=17.0.0
 ```
 
 Some useful commands:
@@ -41,3 +47,5 @@ make sys_write # Runs a simple write only workload -- requires Sysbench
 
 make sys_read_write # Runs a simple mix of read and write workloads -- requires Sysbench
 ```
+
+If the `make sys_prep` command fails with error `FATAL: Connection to database failed: FATAL:  the database system is starting up`, give it a second for the database to start then try again
