@@ -16,21 +16,6 @@ check_vars() {
         exit 1
     fi
 
-    if [ "$USER" = "" ]; then
-        echo "USER is not set"
-        exit 1
-    fi
-
-    if [ "$DATABASE" = "" ]; then
-        echo "DATABASE is not set"
-        exit 1
-    fi
-
-    if [ "$PASSWORD" = "" ]; then
-        echo "PASSWORD is not set"
-        exit 1
-    fi
-
     if [ "$HOST" = "" ]; then
         echo "HOST is not set"
         exit 1
