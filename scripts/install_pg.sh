@@ -6,9 +6,8 @@ CORE_DUMP_DIR="/tmp"
 
 check_version() {
 if [ "$VERSION_STR" = "" ]; then
-    echo "Version is not set. This will be the version number for the image tag e.g account/image-1.0.1 where 1.0.1 is the version"
-    echo "Use 'export VERSION_STR=1.0.0' to set it"
-    exit 1
+    echo "Image version is not set. We'll default to '0.0.1'"
+    VERSION_STR=0.0.1
 fi
 }
 
