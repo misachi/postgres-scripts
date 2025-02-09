@@ -1,0 +1,43 @@
+# Set the right flag using `DOCKER_DEFAULT_PLATFORM` to build the right image for your platform
+FROM ubuntu:latest
+
+# Prepare the directories required
+ENV APP_HOME=/home ID=991 USR=mysql USR_HOME=/home/mysql MYSQL_FILES=/usr/local/mysql/ BASH_PROFILE=/etc/bash.bashrc CMAKE_MAJOR_MINOR=3.31 CMAKE_VERSION=3.31.5
+
+# Permissions
+RUN groupadd -g ${ID} ${USR} && \
+    useradd -r -u ${ID} -g ${USR} -s /bin/false ${USR}
+
+ADD mysql-server ${USR_HOME}/mysql-server
+WORKDIR ${USR_HOME}
+RUN chown -R ${USR}:${USR} ${USR_HOME}
+
+
+# Requirements installations
+RUN apt-get update && apt-get install -y g++ gdb \
+            zlib1g-dev \
+            make wget \
+            git nano \
+            libncurses-dev \
+            bison libaio-dev \
+            libssl-dev libsasl2-dev libnuma-dev pkg-config libtirpc-dev google-perftools
+
+RUN mkdir ~/cmake-${CMAKE_VERSION} && cd ~/cmake-${CMAKE_VERSION} && \
+        wget https://cmake.org/files/v${CMAKE_MAJOR_MINOR}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+        sh cmake-${CMAKE_VERSION}-linux-x86_64.sh --prefix ~/cmake-${CMAKE_VERSION} --skip-license && \
+        update-alternatives --install /usr/bin/cmake cmake ~/cmake-${CMAKE_VERSION}/bin/cmake 60
+
+RUN cd mysql-server && mkdir bld && cd bld && \
+        LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.so.4.5.16 cmake .. -DBUILD_CONFIG=mysql_release -DCMAKE_BUILD_TYPE=Release && \
+        LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.so.4.5.16 make -j16 && LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.so.4.5.16 make install
+
+RUN mkdir -p /usr/local/mysql && cd /usr/local/mysql && \
+        mkdir mysql-files && chown mysql:mysql mysql-files && \
+        chmod 750 mysql-files && cd ${USR_HOME} && \
+        rm -rf mysql-server
+
+
+# Putting executables in our PATH to make things easier later
+RUN echo "export PATH=$PATH:/usr/local/mysql/bin/" >>  ${BASH_PROFILE} && \
+        chown -R ${USR}:${USR} ${MYSQL_FILES}
+USER ${USR}
