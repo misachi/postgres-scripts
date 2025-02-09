@@ -20,19 +20,10 @@ Some requirements are:
 These environment variables would need to be set before running below commands:
 
 1. PORT - port the postmaster will be listening on(default 5432)
-2. HOST - IP address of the instance running the Postgres server
-3. TABLESIZE - How big the tables for running with Sysbench should be. Each table will have `TABLESIZE` rows
-4. MY_IP - IP address of the client(Where Sysbench will be run from)
-5. VERSION_STR - The version number for image tag e.g for image `postgres/test-0.0.3` the `VERSION_STR` is 0.0.3
-
-Example:
-```
-export PORT=5432
-export HOST=192.168.44.21
-export TABLESIZE=1000000
-export MY_IP=192.168.44.21
-export VERSION_STR=17.0.0
-```
+2. HOST - IP address of the instance running the Postgres server(default localhost)
+3. TABLESIZE - How big the tables for running with Sysbench should be. Each table will have `TABLESIZE` rows(default 1000000)
+4. MY_IP - IP address of the client(must be set before running)
+5. VERSION_STR - The version number for image tag e.g for image `postgres/test-0.0.3` the `VERSION_STR` is 0.0.3(default 0.0.1)
 
 Some useful commands:
 
