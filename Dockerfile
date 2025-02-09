@@ -36,7 +36,3 @@ RUN CFLAGS="-O3 -ggdb3" ./configure --without-icu --enable-debug --with-lz4 && \
 RUN echo "export PATH=$PATH:/usr/local/pgsql/bin/" >>  ${BASH_PROFILE} && \
         chown -R ${USR}:${USR} ${PG_FILES}
 USER ${USR}
-
-# Post-Installation
-RUN ${PG_FILES}/bin/pg_ctl -D /usr/local/pgsql/data initdb
-CMD [ "pg_ctl", "-D", "/usr/local/pgsql/data", "-l logfile", "start" ]
