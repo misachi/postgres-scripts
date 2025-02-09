@@ -4,30 +4,29 @@ set -e
 
 check_version() {
 if [ "$VERSION_STR" = "" ]; then
-    echo "Version is not set. This will be the version number for the image tag e.g account/image-1.0.1 where 1.0.1 is the version"
-    echo "Use 'export VERSION_STR=1.0.0' to set it"
-    exit 1
+    echo "Image version is not set. We'll default to '0.0.1'"
+    VERSION_STR=0.0.1
 fi
 }
 
 check_vars() {
     if [ "$PORT" = "" ]; then
-        echo "PORT is not set"
-        exit 1
+        echo "Setting PORT to default 3306"
+        PORT=5432
     fi
 
     if [ "$HOST" = "" ]; then
-        echo "HOST is not set"
-        exit 1
+        echo "Setting HOST to localhost"
+        HOST=localhost
     fi
 
     if [ "$TABLESIZE" = "" ]; then
-        echo "TABLESIZE is not set"
-        exit 1
+        echo "Using defailt TABLESIZE=1000000"
+        TABLESIZE=1000000
     fi
 
     if [ "$MY_IP" = "" ]; then
-        echo "Unknown IP address"
+        echo "Client IP address missing: Use: 'ip addr' or other utility to get address"
         exit 1
     fi
 }
@@ -58,12 +57,12 @@ while getopts ":cprwm" option; do
                 --tables=10 \
                 --table-size=$TABLESIZE \
                 --db-driver=pgsql \
-                --pgsql-host=sbtest \
-                --pgsql-port=sbtest \
+                --pgsql-host=$HOST \
+                --pgsql-port=$PORT \
                 --pgsql-user=sbtest \
                 --threads=10 \
-                --pgsql-password=$PASSWORD \
-                --pgsql-db=$DATABASE \
+                --pgsql-password=sbtest \
+                --pgsql-db=sbtest \
                 prepare
                 ;;
         r) # read
@@ -71,14 +70,14 @@ while getopts ":cprwm" option; do
                 --tables=10 \
                 --table-size=$TABLESIZE \
                 --db-driver=pgsql \
-                --pgsql-host=sbtest \
-                --pgsql-port=sbtest \
+                --pgsql-host=$HOST \
+                --pgsql-port=$PORT \
                 --pgsql-user=sbtest \
-                --pgsql-password=$PASSWORD \
-                --pgsql-db=$DATABASE \
+                --pgsql-password=sbtest \
+                --pgsql-db=sbtest \
                 --threads=16 \
                 --report-interval=2 \
-                --time=60 \
+                --time=60 --db-debug=on \
                 run
                 ;;
         w) # write
@@ -86,11 +85,11 @@ while getopts ":cprwm" option; do
                 --tables=10 \
                 --table-size=$TABLESIZE \
                 --db-driver=pgsql \
-                --pgsql-host=sbtest \
-                --pgsql-port=sbtest \
+                --pgsql-host=$HOST \
+                --pgsql-port=$PORT \
                 --pgsql-user=sbtest \
-                --pgsql-password=$PASSWORD \
-                --pgsql-db=$DATABASE \
+                --pgsql-password=sbtest \
+                --pgsql-db=sbtest \
                 --threads=16 \
                 --report-interval=2 \
                 --time=60 \
@@ -101,11 +100,11 @@ while getopts ":cprwm" option; do
                 --tables=10 \
                 --table-size=$TABLESIZE \
                 --db-driver=pgsql \
-                --pgsql-host=sbtest \
-                --pgsql-port=sbtest \
+                --pgsql-host=$HOST \
+                --pgsql-port=$PORT \
                 --pgsql-user=sbtest \
-                --pgsql-password=$PASSWORD \
-                --pgsql-db=$DATABASE \
+                --pgsql-password=sbtest \
+                --pgsql-db=sbtest \
                 --threads=16 \
                 --report-interval=2 \
                 --time=60 \
