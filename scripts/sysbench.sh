@@ -11,7 +11,7 @@ fi
 
 check_vars() {
     if [ "$PORT" = "" ]; then
-        echo "Setting PORT to default 3306"
+        echo "Setting PORT to default 5432"
         PORT=5432
     fi
 
