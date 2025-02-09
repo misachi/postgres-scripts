@@ -40,3 +40,20 @@ make sys_read_write # Runs a simple mix of read and write workloads -- requires 
 ```
 
 If the `make sys_prep` command fails with error `FATAL: Connection to database failed: FATAL:  the database system is starting up`, give it a second for the database to start then try again
+
+To complete setup for mysql. Get the root dafault password:
+```
+docker logs <mysql_container> # Replace mysql_container with the correct container name
+```
+
+With the `root` password, these queries should be ran:
+```
+alter user 'root'@'localhost' identified by 'pass1234';  -- update root password
+
+-- These are needed by sysbench
+create user 'sbtest'@'your_ip_address' identified by 'sbtest';
+create database sbtest;
+grant create, alter, insert, update, delete, select, index on sbtest.* to 'sbtest'@'your_ip_address';
+
+flush privileges; -- reload
+```
