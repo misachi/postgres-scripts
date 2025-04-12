@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 check_pg_exists() {
     if [ -d "postgres" ]; then

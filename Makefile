@@ -18,6 +18,9 @@ run_pg:
 
 build: install_pg build_pg
 
+sys_create_db:
+	@-./scripts/sysbench.sh -c
+
 sys_prep:
 	@-./scripts/sysbench.sh -c
 	@-./scripts/sysbench.sh -p

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Mounts data volume on XFS filesystem
 
 docker volume create --opt type=none --opt o=bind --opt device=/mnt/xfs_d/pg18 xfs_pg18_1

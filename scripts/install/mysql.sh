@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 check_dir_exists() {
     if [ -d "mysql-server" ]; then
